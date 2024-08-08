@@ -1,6 +1,9 @@
 [package]
-name = "bitcoin"
+name = "bitcoin-sfy"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+bitcoin = "0"
+snafu = "0"
+rand = "0"
