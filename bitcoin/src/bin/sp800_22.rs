@@ -58,10 +58,16 @@ pub fn main() -> Result<(), Whatever> {
                         .with_whatever_context(|_| "derive path error")?,
                 )
                 .with_whatever_context(|_| "can't create child xpriv")?;
-            file.write_all(&child.private_key.secret_bytes())
+            //file.write_all(&child.private_key.secret_bytes())
+            //.with_whatever_context(|_| "can't write sub data file")?;
+            //final_data_file
+            //.write_all(&child.private_key.secret_bytes())
+            //.with_whatever_context(|_| "can't write final data file")?;
+            // 丢弃首字节前缀
+            file.write_all(&child.private_key.public_key(&secp).serialize()[1..])
                 .with_whatever_context(|_| "can't write sub data file")?;
             final_data_file
-                .write_all(&child.private_key.secret_bytes())
+                .write_all(&child.private_key.public_key(&secp).serialize()[1..])
                 .with_whatever_context(|_| "can't write final data file")?;
         }
     }
