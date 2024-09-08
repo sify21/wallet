@@ -36,8 +36,11 @@ fn main() -> Result<(), Whatever> {
                     .with_whatever_context(|_| "derive path error")?,
             )
             .with_whatever_context(|_| "can't derive child xpriv")?;
+        //sequential
+        //.write_all(&child.private_key.secret_bytes()[..1])
+        //.with_whatever_context(|_| "can't write sequential")?;
         sequential
-            .write_all(&child.private_key.secret_bytes()[..1])
+            .write_all(&child.private_key.public_key(&secp).serialize()[1..2])
             .with_whatever_context(|_| "can't write sequential")?;
     }
     // 生成1000*1000的矩阵用于重启测试
@@ -77,11 +80,16 @@ fn main() -> Result<(), Whatever> {
     for i in 0..1000 {
         for j in 0..1000 {
             // 生成row dataset
-            row.write_all(&matrix[i][j].private_key.secret_bytes()[..1])
+            //row.write_all(&matrix[i][j].private_key.secret_bytes()[..1])
+            //.with_whatever_context(|_| "can't write row-data file")?;
+            row.write_all(&matrix[i][j].private_key.public_key(&secp).serialize()[1..2])
                 .with_whatever_context(|_| "can't write row-data file")?;
             // 生成column dataset
+            //column
+            //.write_all(&matrix[j][i].private_key.secret_bytes()[..1])
+            //.with_whatever_context(|_| "can't write column-data file")?;
             column
-                .write_all(&matrix[j][i].private_key.secret_bytes()[..1])
+                .write_all(&matrix[j][i].private_key.public_key(&secp).serialize()[1..2])
                 .with_whatever_context(|_| "can't write column-data file")?;
         }
     }
